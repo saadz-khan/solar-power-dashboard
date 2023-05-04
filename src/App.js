@@ -66,17 +66,17 @@ const App = () => {
   }, []);
 
   const handleChartBack = () => {
-    if (offset > 0 && offset >= CHART_SIZE) {
-      setOffset(offset - CHART_SIZE);
-    } else if (offset > 0) {
-      setOffset(0);
-    }
-  };
-  const handleChartForward = () => {
     if (offset < data.length - CHART_SIZE) {
       setOffset(offset + 10);
     } else {
       setOffset(data.length - CHART_SIZE);
+    }
+  };
+  const handleChartForward = () => {
+    if (offset > 0 && offset >= CHART_SIZE) {
+      setOffset(offset - CHART_SIZE);
+    } else if (offset > 0) {
+      setOffset(0);
     }
   };
   console.log(offset);
@@ -100,14 +100,6 @@ const App = () => {
           y: item.MODULE_TEMPERATURE,
         })),
       },
-      {
-        id: "Solar Irradiation",
-        color: "hsl(292, 70%, 50%)",
-        data: slicedData.map((item) => ({
-          x: item.DATE_TIME,
-          y: item.IRRADIATION,
-        })),
-      },
     ];
   }, [data, offset]);
 
@@ -116,14 +108,6 @@ const App = () => {
     const slicedData = data.slice(offset, offset + CHART_SIZE); // Use data instead of powerData for X-axis
     const slicedPowerData = powerData.slice(offset, offset + CHART_SIZE);
     return [
-      {
-        id: "AC Power",
-        color: "hsl(20, 70%, 50%)",
-        data: slicedData.map((item, index) => ({ // Use slicedData instead of slicedPowerData for X-axis
-          x: item.DATE_TIME,
-          y: slicedPowerData[index]?.AC_POWER ?? 0, // Use index to get AC_POWER from slicedPowerData
-        })),
-      },
       {
         id: "DC Power",
         color: "hsl(200, 70%, 50%)",
@@ -240,8 +224,6 @@ const App = () => {
         </div>{" "}
         
         <div className="chart-wrapper">
-          <button onClick={handleChartBack}>Back</button>
-          <button onClick={handleChartForward}>Forward</button>
           <div style={{ height: 400 }}>
             <ResponsiveLine
               data={powerChartData}
