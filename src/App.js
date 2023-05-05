@@ -12,6 +12,8 @@ import PowerIcon from "@material-ui/icons/Power";
 import BatteryChargingFullIcon from "@material-ui/icons/BatteryChargingFull";
 import { ResponsiveLine } from "@nivo/line";
 import { ResponsiveBar } from "@nivo/bar";
+import { ResponsivePie } from "@nivo/pie";
+
 
 const CHART_SIZE = 10;
 
@@ -109,15 +111,35 @@ const App = () => {
     const slicedPowerData = powerData.slice(offset, offset + CHART_SIZE);
     return [
       {
-        id: "DC Power",
+        id: "Daily Yield",
         color: "hsl(200, 70%, 50%)",
         data: slicedData.map((item, index) => ({ // Use slicedData instead of slicedPowerData for X-axis
           x: item.DATE_TIME,
-          y: slicedPowerData[index]?.DC_POWER ?? 0, // Use index to get DC_POWER from slicedPowerData
+          y: slicedPowerData[index]?.DAILY_YIELD ?? 0, // Use index to get DC_POWER from slicedPowerData
         })),
       },
     ];
   }, [data, powerData, offset]);
+
+
+  const generatePieChartData = () => {
+    const acPower = powerData[0]?.AC_POWER ?? 0;
+    const dcPower = powerData[0]?.DC_POWER ?? 0;
+    const totalPower = acPower + dcPower;
+  
+    return [
+      {
+        id: "AC Power",
+        label: "AC Power",
+        value: parseFloat(((acPower / totalPower) * 100).toFixed(2)),
+      },
+      {
+        id: "DC Power",
+        label: "DC Power",
+        value: parseFloat(((dcPower / totalPower) * 100).toFixed(2)),
+      },
+    ];
+  };
   
   
 
@@ -282,6 +304,52 @@ const App = () => {
                       on: "hover",
                       style: {
                         itemBackground: "rgba(0, 0, 0, .03)",
+                        itemOpacity: 1,
+                      },
+                    },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        </div>{" "}
+
+        <div className="chart-wrapper">
+          <div style={{ height: 400 }}>
+            <ResponsivePie
+              data={generatePieChartData()}
+              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+              innerRadius={0.5}
+              padAngle={0.7}
+              cornerRadius={3}
+              colors={{ scheme: "nivo" }}
+              borderWidth={1}
+              borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
+              radialLabelsSkipAngle={10}
+              radialLabelsTextColor="#333333"
+              radialLabelsLinkColor={{ from: "color" }}
+              sliceLabelsSkipAngle={10}
+              sliceLabelsTextColor="#333333"
+              legends={[
+                {
+                  anchor: "bottom",
+                  direction: "row",
+                  justify: false,
+                  translateX: 0,
+                  translateY: 56,
+                  itemsSpacing: 0,
+                  itemWidth: 100,
+                  itemHeight: 18,
+                  itemTextColor: "#999",
+                  itemDirection: "left-to-right",
+                  itemOpacity: 1,
+                  symbolSize: 18,
+                  symbolShape: "circle",
+                  effects: [
+                    {
+                      on: "hover",
+                      style: {
+                        itemTextColor: "#000",
                         itemOpacity: 1,
                       },
                     },
