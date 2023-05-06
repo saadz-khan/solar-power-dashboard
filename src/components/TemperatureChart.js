@@ -1,5 +1,6 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
+import { Buttons } from "./Buttons";
 
 const CHART_SIZE = 25;
 export const TemperatureChart = (props) => {
@@ -29,6 +30,7 @@ export const TemperatureChart = (props) => {
   }, [data, offset]);
 
   const handleChartBack = () => {
+    console.log("going back");
     if (offset < data.length - CHART_SIZE) {
       setOffset(offset + 10);
     } else {
@@ -61,7 +63,7 @@ export const TemperatureChart = (props) => {
           axisTop={null}
           axisRight={null}
           axisBottom={{
-            tickSize: 5,
+            tickSize: 2,
             tickPadding: 5,
             tickRotation: 0,
             legend: "Time",
@@ -111,10 +113,7 @@ export const TemperatureChart = (props) => {
           ]}
         />
       </div>
-      <div>
-        <button onClick={handleChartBack}>Back</button>
-        <button onClick={handleChartForward}>Forward</button>
-      </div>
+      <Buttons onNext={handleChartForward} onBack={handleChartBack} />
     </div>
   );
 };

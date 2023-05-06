@@ -3,10 +3,16 @@ import { SummaryCards } from "./components/SummaryCards";
 import { TemperatureChart } from "./components/TemperatureChart";
 import { DailyYieldChart } from "./components/DailyYieldChart";
 import { PowerChart } from "./components/PowerChart";
-import { getControlsData, getData, getPowerData } from "./utils/data";
+import {
+  getControlsData,
+  getData,
+  getPowerData,
+  pushControlsData,
+} from "./utils/data";
 import {
   AppBar,
   Box,
+  Drawer,
   IconButton,
   Toolbar,
   Typography,
@@ -16,27 +22,41 @@ import { MenuBook } from "@material-ui/icons";
 import "./App.css";
 import { Alerts } from "./components/Alerts";
 import { Controls } from "./components/Controls";
+import { Loading } from "./components/Loading";
 
 const App = () => {
   const [data, setData] = useState([]);
   const [powerData, setPowerData] = useState([]);
   const [latestControlsData, setLatestControlsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const loadData = async () => {
+    setLoading(true);
+    const data = await getData();
+    const powerData = await getPowerData();
+    const controlsData = await getControlsData();
+    setData(data);
+    setPowerData(powerData);
+    setLatestControlsData(controlsData);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getData().then(setData);
-    getPowerData().then((data) => {
-      setPowerData(data)
-      console.log(data)
-    });
-    getControlsData().then((data) => {
-      console.log(data)
+    loadData();
+  }, []);
+
+  const handleChangeControlsData = (data) => {
+    setLoading(true);
+    pushControlsData(data).then(() => {
+      setLoading(false);
       setLatestControlsData(data);
     });
-  }, []);
+  };
+  console.log(latestControlsData);
 
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }} marginBottom={2}>
+      <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -54,18 +74,33 @@ const App = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box margin={2}>
-        {latestControlsData && <Controls data={latestControlsData} />}
+      {loading ? (
+        <Loading />
+      ) : (
+        <Box margin={2} marginTop={2}>
+          {latestControlsData && (
+            <Controls
+              data={latestControlsData}
+              onChangeControlsData={handleChangeControlsData}
+            />
+          )}
 
-        {latestControlsData && latestControlsData[1] === "0" && (
-          <Alerts latestControlsData={latestControlsData} />
-        )}
+          {latestControlsData && latestControlsData.ManualOverride === "0" && (
+            <Alerts latestControlsData={latestControlsData} />
+          )}
 
-        <SummaryCards powerData={powerData} data={data} />
-        <TemperatureChart data={data} />
-        <DailyYieldChart powerData={powerData} />
-        <PowerChart powerData={powerData} />
-      </Box>
+          <SummaryCards powerData={powerData} data={data} />
+          <TemperatureChart data={data} />
+          <Box style={{ display: "flex" }}>
+            <Box flexGrow={1}>
+              <DailyYieldChart powerData={powerData} />
+            </Box>
+            <Box flexGrow={1}>
+              <PowerChart powerData={powerData} />
+            </Box>
+          </Box>
+        </Box>
+      )}
     </div>
   );
 };

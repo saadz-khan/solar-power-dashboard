@@ -1,6 +1,7 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
 import { jitter } from "../utils/jitter";
+import { Buttons } from "./Buttons";
 
 const CHART_SIZE = 10;
 
@@ -23,7 +24,7 @@ export const DailyYieldChart = (props) => {
       {
         id: "Daily Yield",
         color: "hsl(200, 70%, 50%)",
-        data: chartData
+        data: chartData,
       },
     ];
   }, [powerData, offset]);
@@ -49,8 +50,8 @@ export const DailyYieldChart = (props) => {
         <ResponsiveLine
           data={powerChartData}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          xScale={{ type: "time", format: "%d/%m/%Y %H:%M:%s" }}
-          xFormat="time:%d-%m-%Y %H:%M:%s"
+          xScale={{ type: "time", format: "%m/%d/%Y %H:%M:%s" }}
+          xFormat="time:%m-%d-%Y %H:%M:%s"
           yScale={{
             type: "linear",
             min: "auto",
@@ -65,7 +66,7 @@ export const DailyYieldChart = (props) => {
             tickPadding: 5,
             tickRotation: 0,
             legend: "Time",
-            format: "%d-%m-%Y %H:%M:%s",
+            format: "%H:%M:%s",
             legendOffset: 36,
             legendPosition: "middle",
           }}
@@ -111,10 +112,7 @@ export const DailyYieldChart = (props) => {
           ]}
         />
       </div>
-      <div>
-        <button onClick={handleChartBack}>Back</button>
-        <button onClick={handleChartForward}>Forward</button>
-      </div>
+      <Buttons onNext={handleChartForward} onBack={handleChartBack} />
     </div>
   );
 };

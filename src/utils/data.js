@@ -1,11 +1,15 @@
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, limitToLast, query, set, once } from "firebase/database";
 import { InitializeFirebase } from "./firebase";
-import { CONTROL_CONNECTION_DETAILS, POWER_CONNECTION_DETAILS, WEATHER_CONNECTION_DETAILS } from "./config";
+import {
+  CONTROL_CONNECTION_DETAILS,
+  POWER_CONNECTION_DETAILS,
+  WEATHER_CONNECTION_DETAILS,
+} from "./config";
 
-export const getData = () => {
+export const getData = async () => {
   return new Promise((resolve, reject) => {
     const db = InitializeFirebase(WEATHER_CONNECTION_DETAILS, "app1");
-    const dbRef = ref(db);
+    const dbRef = query(ref(db), limitToLast(1000));
 
     onValue(dbRef, (snapshot) => {
       let dummyData = [];
@@ -18,10 +22,10 @@ export const getData = () => {
   });
 };
 
-export const getPowerData = () => {
+export const getPowerData = async () => {
   return new Promise((resolve, reject) => {
     const db = InitializeFirebase(POWER_CONNECTION_DETAILS, "app2");
-    const dbRef = ref(db);
+    const dbRef = query(ref(db), limitToLast(1000));
 
     onValue(dbRef, (snapshot) => {
       let dummyData = [];
@@ -34,19 +38,21 @@ export const getPowerData = () => {
   });
 };
 
-export const getControlsData = () => {
+export const getControlsData = async () => {
   return new Promise((resolve, reject) => {
-
     const db = InitializeFirebase(CONTROL_CONNECTION_DETAILS);
     const dbRef = ref(db);
 
     onValue(dbRef, (snapshot) => {
-      let dummyData = [];
-      snapshot.forEach((child) => {
-        let childData = child.val();
-        dummyData.push(childData);
-      });
-      resolve(dummyData.reverse());
+      resolve(snapshot.val());
     });
-  })
-}
+  });
+};
+
+export const pushControlsData = async (newData) => {
+  return new Promise((resolve, reject) => {
+    const db = InitializeFirebase(CONTROL_CONNECTION_DETAILS);
+    const dbRef = ref(db);
+    set(dbRef, newData).then(resolve, reject);
+  });
+};
