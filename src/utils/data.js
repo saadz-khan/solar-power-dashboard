@@ -1,9 +1,10 @@
 import { onValue, ref } from "firebase/database";
-import { InitializeFirebase, InitializeFirebase1, initializeControlsFirebase } from "./firebase";
+import { InitializeFirebase } from "./firebase";
+import { CONTROL_CONNECTION_DETAILS, POWER_CONNECTION_DETAILS, WEATHER_CONNECTION_DETAILS } from "./config";
 
 export const getData = () => {
   return new Promise((resolve, reject) => {
-    const db = InitializeFirebase();
+    const db = InitializeFirebase(WEATHER_CONNECTION_DETAILS, "app1");
     const dbRef = ref(db);
 
     onValue(dbRef, (snapshot) => {
@@ -19,7 +20,7 @@ export const getData = () => {
 
 export const getPowerData = () => {
   return new Promise((resolve, reject) => {
-    const db = InitializeFirebase1();
+    const db = InitializeFirebase(POWER_CONNECTION_DETAILS, "app2");
     const dbRef = ref(db);
 
     onValue(dbRef, (snapshot) => {
@@ -36,7 +37,7 @@ export const getPowerData = () => {
 export const getControlsData = () => {
   return new Promise((resolve, reject) => {
 
-    const db = initializeControlsFirebase();
+    const db = InitializeFirebase(CONTROL_CONNECTION_DETAILS);
     const dbRef = ref(db);
 
     onValue(dbRef, (snapshot) => {

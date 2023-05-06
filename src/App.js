@@ -24,8 +24,12 @@ const App = () => {
 
   useEffect(() => {
     getData().then(setData);
-    getPowerData().then(setPowerData);
+    getPowerData().then((data) => {
+      setPowerData(data)
+      console.log(data)
+    });
     getControlsData().then((data) => {
+      console.log(data)
       setLatestControlsData(data);
     });
   }, []);

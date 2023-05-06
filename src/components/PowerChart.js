@@ -7,7 +7,6 @@ export const PowerChart = (props) => {
   const pieChartData = useMemo(() => {
     const acPower = powerData[0]?.AC_POWER ?? 0;
     const dcPower = powerData[0]?.DC_POWER ?? 0;
-    console.log({acPower, dcPower})
     const totalPower = acPower + dcPower;
 
     if (totalPower === 0) {

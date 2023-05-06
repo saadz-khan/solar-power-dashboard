@@ -1,6 +1,6 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
-import { compareDate, jitter } from "../utils/jitter";
+import { jitter } from "../utils/jitter";
 
 const CHART_SIZE = 10;
 
