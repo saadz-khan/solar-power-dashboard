@@ -11,23 +11,27 @@ export const ForecastChart = (props) => {
   console.log(forecastData);
   const chartData = useMemo(() => {
     const slicedForecastData = forecastData.slice(offset, offset + CHART_SIZE);
-    console.log(slicedForecastData);
+    //console.log(slicedForecastData);
     return [
       {
         id: "Actual",
         color: "hsl(306, 70%, 50%)",
-        data: slicedForecastData.map((item) => ({
-          x: item.DATE_TIME,
-          y: item.Actual,
-        })),
+        data: slicedForecastData
+          .filter((item) => item.DATE_TIME !== "0")
+          .map((item) => ({
+            x: item.DATE_TIME,
+            y: item.Actual,
+          })),
       },
       {
         id: "Forecasted",
         color: "hsl(160, 70%, 50%)",
-        data: slicedForecastData.map((item) => ({
-          x: item.DATE_TIME,
-          y: item.Predicted,
-        })),
+        data: slicedForecastData
+          .filter((item) => item.DATE_TIME !== "0")
+          .map((item) => ({
+            x: item.DATE_TIME,
+            y: item.Predicted,
+          })),
       },
     ];
   }, [forecastData, offset]);
@@ -123,4 +127,6 @@ export const ForecastChart = (props) => {
     </div>
   );
 };
+
+      
 export default ForecastChart;

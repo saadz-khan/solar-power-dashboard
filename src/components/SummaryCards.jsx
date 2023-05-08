@@ -6,11 +6,11 @@ import {
   Power,
   Speed,
   WbSunny,
+  BatteryFull,
 } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   card: {
-    // minWidth: 180,
     textAlign: "center",
     display: "inline-block",
     margin: "10px",
@@ -21,7 +21,8 @@ const useStyles = makeStyles({
 });
 
 export const SummaryCards = (props) => {
-  const { powerData, data } = props;
+  const { powerData, data, forecastData } = props;
+  console.log(forecastData);
 
   return (
     <div>
@@ -60,6 +61,11 @@ export const SummaryCards = (props) => {
           icon={<BatteryChargingFull />}
           title="Total Yield"
           value={powerData[0]?.TOTAL_YIELD ?? "-"}
+        />
+        <SummaryCard
+          icon={<BatteryFull />}
+          title="Next day Forecasted Daily Yield"
+          value={6007183.58 ?? "-"}
         />
       </Box>
     </div>
