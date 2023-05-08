@@ -30,3 +30,13 @@ export const CONTROL_CONNECTION_DETAILS = {
   appId: "1:914085336744:web:33d3083fa3379ad7cd149d",
   measurementId: "G-CHY9MHM47L",
 };
+
+export const FORECAST_CONNECTION_DETAILS = {
+  apiKey: "AIzaSyApYwOxN-ZBo8EVbbtaJMxAvJKpnXgnHQ0",
+  authDomain: "forecasting-1609.firebaseapp.com",
+  databaseURL: "https://forecasting-1609-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "forecasting-1609",
+  storageBucket: "forecasting-1609.appspot.com",
+  messagingSenderId: "474531974788",
+  appId: "1:474531974788:web:cf083eb6006ef60ca8bcd1"
+};

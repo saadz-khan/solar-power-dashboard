@@ -3,10 +3,12 @@ import { SummaryCards } from "./components/SummaryCards";
 import { TemperatureChart } from "./components/TemperatureChart";
 import { DailyYieldChart } from "./components/DailyYieldChart";
 import { PowerChart } from "./components/PowerChart";
+import { ForecastChart } from "./components/ForecastChart";
 import {
   getControlsData,
   getData,
   getPowerData,
+  getForecastData,
   pushControlsData,
 } from "./utils/data";
 import {
@@ -17,7 +19,7 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { MenuBook } from "@material-ui/icons";
+import { Dashboard } from "@material-ui/icons";
 
 import "./App.css";
 import { Alerts } from "./components/Alerts";
@@ -27,6 +29,7 @@ import { Loading } from "./components/Loading";
 const App = () => {
   const [data, setData] = useState([]);
   const [powerData, setPowerData] = useState([]);
+  const [forecastData, setForecastData] = useState([]);
   const [latestControlsData, setLatestControlsData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -34,9 +37,11 @@ const App = () => {
     setLoading(true);
     const data = await getData();
     const powerData = await getPowerData();
+    const forecastData = await getForecastData();
     const controlsData = await getControlsData();
     setData(data);
     setPowerData(powerData);
+    setForecastData(forecastData);
     setLatestControlsData(controlsData);
     setLoading(false);
   };
@@ -66,7 +71,7 @@ const App = () => {
               aria-label="menu"
               sx={{ mr: 2 }}
             >
-              <MenuBook />
+              <Dashboard />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               SOLAR POWER DASHBOARD
@@ -91,6 +96,7 @@ const App = () => {
 
           <SummaryCards powerData={powerData} data={data} />
           <TemperatureChart data={data} />
+          <ForecastChart forecastData={forecastData} />
           <Box style={{ display: "flex" }}>
             <Box flexGrow={1}>
               <DailyYieldChart powerData={powerData} />

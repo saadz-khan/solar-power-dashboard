@@ -2,39 +2,41 @@ import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
 import { Buttons } from "./Buttons";
 
-const CHART_SIZE = 25;
-export const TemperatureChart = (props) => {
-  const { data } = props;
+const CHART_SIZE = 150;
+
+export const ForecastChart = (props) => {
+  const { forecastData } = props;
   const [offset, setOffset] = useState(0);
 
+  console.log(forecastData);
   const chartData = useMemo(() => {
-    const slicedData = data.slice(offset, offset + CHART_SIZE);
+    const slicedForecastData = forecastData.slice(offset, offset + CHART_SIZE);
+    console.log(slicedForecastData);
     return [
       {
-        id: "Ambient Temperature",
+        id: "Actual",
         color: "hsl(306, 70%, 50%)",
-        data: slicedData.map((item, index) => ({
+        data: slicedForecastData.map((item) => ({
           x: item.DATE_TIME,
-          y: item.AMBIENT_TEMPERATURE,
+          y: item.Actual,
         })),
       },
       {
-        id: "Module Temperature",
-        color: "hsl(234, 70%, 50%)",
-        data: slicedData.map((item, index) => ({
+        id: "Forecasted",
+        color: "hsl(160, 70%, 50%)",
+        data: slicedForecastData.map((item) => ({
           x: item.DATE_TIME,
-          y: item.MODULE_TEMPERATURE,
+          y: item.Predicted,
         })),
       },
     ];
-  }, [data, offset]);
+  }, [forecastData, offset]);
 
   const handleChartBack = () => {
-    console.log("going back");
-    if (offset < data.length - CHART_SIZE) {
+    if (offset < forecastData.length - CHART_SIZE) {
       setOffset(offset + 10);
     } else {
-      setOffset(data.length - CHART_SIZE);
+      setOffset(forecastData.length - CHART_SIZE);
     }
   };
   const handleChartForward = () => {
@@ -45,20 +47,24 @@ export const TemperatureChart = (props) => {
     }
   };
 
+  if (!forecastData) {
+    return <div>Loading forecast data...</div>;
+  }
+
   return (
     <div>
       <div style={{ height: 400 }}>
         <ResponsiveLine
           data={chartData}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          xScale={{ type: "time", format: "%d/%m/%Y %H:%M" }} //05/15/2020 0:00
-          xFormat="time:%d-%m-%Y %H:%M"
+          xScale={{ type: "time", format: "%Y-%m-%d %H:%M:%S" }}
+          xFormat="time:%Y-%m-%d %H:%M:%S"
           yScale={{
             type: "linear",
-            min: 0,
-            max: 50,
             stacked: false,
             reverse: false,
+            min: 0,
+            max: 180000,
           }}
           axisTop={null}
           axisRight={null}
@@ -75,7 +81,7 @@ export const TemperatureChart = (props) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Temperature (C)",
+            legend: "Daily Yield (kilowatt)",
             legendOffset: -40,
             legendPosition: "middle",
           }}
@@ -117,3 +123,4 @@ export const TemperatureChart = (props) => {
     </div>
   );
 };
+export default ForecastChart;

@@ -4,6 +4,7 @@ import {
   CONTROL_CONNECTION_DETAILS,
   POWER_CONNECTION_DETAILS,
   WEATHER_CONNECTION_DETAILS,
+  FORECAST_CONNECTION_DETAILS
 } from "./config";
 
 export const getData = async () => {
@@ -56,3 +57,21 @@ export const pushControlsData = async (newData) => {
     set(dbRef, newData).then(resolve, reject);
   });
 };
+
+export const getForecastData = async () => {
+  return new Promise((resolve, reject) => {
+    const db = InitializeFirebase(FORECAST_CONNECTION_DETAILS, "app3");
+    const dbRef = query(ref(db), limitToLast(1000));
+
+    onValue(dbRef, (snapshot) => {
+      let forecastData = [];
+      snapshot.forEach((child) => {
+        let childData = child.val();
+        forecastData.push(childData);
+      });
+      resolve(forecastData.reverse());
+    });
+  });
+};
+
+
