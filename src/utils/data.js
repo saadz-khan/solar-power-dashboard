@@ -1,4 +1,4 @@
-import { onValue, ref, limitToLast, query, set, once } from "firebase/database";
+import { onValue, ref, limitToLast, query, set, child } from "firebase/database";
 import { InitializeFirebase } from "./firebase";
 import {
   CONTROL_CONNECTION_DETAILS,
@@ -26,7 +26,7 @@ export const getData = async () => {
 export const getPowerData = async () => {
   return new Promise((resolve, reject) => {
     const db = InitializeFirebase(POWER_CONNECTION_DETAILS, "app2");
-    const dbRef = query(ref(db), limitToLast(1000));
+    const dbRef = query(ref(db), limitToLast(400));
 
     onValue(dbRef, (snapshot) => {
       let dummyData = [];
@@ -61,7 +61,7 @@ export const pushControlsData = async (newData) => {
 export const getForecastData = async () => {
   return new Promise((resolve, reject) => {
     const db = InitializeFirebase(FORECAST_CONNECTION_DETAILS, "app3");
-    const dbRef = query(ref(db), limitToLast(1000));
+    const dbRef = query(ref(db), limitToLast(700));
 
     onValue(dbRef, (snapshot) => {
       let forecastData = [];
@@ -70,6 +70,23 @@ export const getForecastData = async () => {
         forecastData.push(childData);
       });
       resolve(forecastData.reverse());
+    });
+  });
+};
+
+
+export const getConsumptionData = async () => {
+  return new Promise((resolve, reject) => {
+    const db = InitializeFirebase(FORECAST_CONNECTION_DETAILS, "app3");
+    const dbRef = child(ref(db), "consumption", limitToLast(300)); // Fetch data from the "/consumption" child node
+
+    onValue(dbRef, (snapshot) => {
+      let consumptionData = [];
+      snapshot.forEach((child) => {
+        let childData = child.val();
+        consumptionData.push(childData);
+      });
+      resolve(consumptionData.reverse());
     });
   });
 };

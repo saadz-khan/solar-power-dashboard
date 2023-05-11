@@ -2,20 +2,18 @@ import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
 import { Buttons } from "./Buttons";
 
-const CHART_SIZE = 150;
+const CHART_SIZE = 100;
 
 export const ForecastChart = (props) => {
   const { forecastData } = props;
   const [offset, setOffset] = useState(0);
 
-  console.log(forecastData);
   const chartData = useMemo(() => {
-    const slicedForecastData = forecastData.slice(offset, offset + CHART_SIZE);
-    //console.log(slicedForecastData);
+    const slicedForecastData = forecastData.slice(1+offset, offset + CHART_SIZE);
     return [
       {
         id: "Actual",
-        color: "hsl(306, 70%, 50%)",
+        color: "hsl(252, 53%, 50%)",
         data: slicedForecastData
           .filter((item) => item.DATE_TIME !== "0")
           .map((item) => ({
@@ -25,7 +23,7 @@ export const ForecastChart = (props) => {
       },
       {
         id: "Forecasted",
-        color: "hsl(160, 70%, 50%)",
+        color: "hsl(87, 56%, 38%",
         data: slicedForecastData
           .filter((item) => item.DATE_TIME !== "0")
           .map((item) => ({

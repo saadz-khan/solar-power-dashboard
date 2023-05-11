@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Alert } from "@material-ui/lab";
 import { useMemo } from "react";
 
 const getPriority = (recString) => {

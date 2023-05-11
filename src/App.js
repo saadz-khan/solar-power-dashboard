@@ -4,17 +4,19 @@ import { TemperatureChart } from "./components/TemperatureChart";
 import { DailyYieldChart } from "./components/DailyYieldChart";
 import { PowerChart } from "./components/PowerChart";
 import { ForecastChart } from "./components/ForecastChart";
+import { ConsumptionChart } from "./components/ConsumptionChart";
+
 import {
   getControlsData,
   getData,
   getPowerData,
   getForecastData,
+  getConsumptionData,
   pushControlsData,
 } from "./utils/data";
 import {
   AppBar,
   Box,
-  Drawer,
   IconButton,
   Toolbar,
   Typography,
@@ -30,6 +32,7 @@ const App = () => {
   const [data, setData] = useState([]);
   const [powerData, setPowerData] = useState([]);
   const [forecastData, setForecastData] = useState([]);
+  const [consumptionData, setConsumptionData] = useState([]);
   const [latestControlsData, setLatestControlsData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -39,9 +42,12 @@ const App = () => {
     const powerData = await getPowerData();
     const forecastData = await getForecastData();
     const controlsData = await getControlsData();
+    const consumptionData = await getConsumptionData();
+
     setData(data);
     setPowerData(powerData);
     setForecastData(forecastData);
+    setConsumptionData(consumptionData);
     setLatestControlsData(controlsData);
     setLoading(false);
   };
@@ -96,7 +102,15 @@ const App = () => {
 
           <SummaryCards powerData={powerData} data={data} />
           <TemperatureChart data={data} />
-          <ForecastChart forecastData={forecastData} />
+          <Box style={{ display: "flex" }}>
+            <Box flexGrow={1}>
+              <ForecastChart forecastData={forecastData} />
+            </Box>
+            <Box flexGrow={1}>
+              <ConsumptionChart consumptionData={consumptionData} />
+            </Box>
+          </Box>
+
           <Box style={{ display: "flex" }}>
             <Box flexGrow={1}>
               <DailyYieldChart powerData={powerData} />

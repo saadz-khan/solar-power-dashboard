@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 
 export const Loading = () => {
   return (

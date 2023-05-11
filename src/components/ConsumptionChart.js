@@ -2,39 +2,31 @@ import { ResponsiveLine } from "@nivo/line";
 import { useMemo, useState } from "react";
 import { Buttons } from "./Buttons";
 
-const CHART_SIZE = 25;
-export const TemperatureChart = (props) => {
-  const { data } = props;
+const CHART_SIZE = 80;
+
+export const ConsumptionChart = (props) => {
+  const { consumptionData } = props;
   const [offset, setOffset] = useState(0);
 
   const chartData = useMemo(() => {
-    const slicedData = data.slice(offset, offset + CHART_SIZE);
+    const slicedConsumptionData = consumptionData.slice(offset, offset + CHART_SIZE);
     return [
       {
-        id: "Ambient Temperature",
-        //colors: "hsl(200, 80%, 50%)",
-        data: slicedData.map((item, index) => ({
-          x: item.DATE_TIME,
-          y: item.AMBIENT_TEMPERATURE,
-        })),
-      },
-      {
-        id: "Module Temperature",
-        //color: "hsl(350, 51%, 50%)",
-        data: slicedData.map((item, index) => ({
-          x: item.DATE_TIME,
-          y: item.MODULE_TEMPERATURE,
+        id: "Active Power",
+        color: "hsl(252, 53%, 50%)",
+        data: slicedConsumptionData.map((item) => ({
+          x: item.DATE_TIME, // Convert DATE_TIME to Date type
+          y: item.Global_active_power
         })),
       },
     ];
-  }, [data, offset]);
+  }, [consumptionData, offset]);
 
   const handleChartBack = () => {
-    //console.log("going back");
-    if (offset < data.length - CHART_SIZE) {
+    if (offset < consumptionData.length - CHART_SIZE) {
       setOffset(offset + 10);
     } else {
-      setOffset(data.length - CHART_SIZE);
+      setOffset(consumptionData.length - CHART_SIZE);
     }
   };
   const handleChartForward = () => {
@@ -45,21 +37,27 @@ export const TemperatureChart = (props) => {
     }
   };
 
+  if (!consumptionData) {
+    return <div>Loading forecast data...</div>;
+  }
+
   return (
     <div>
       <div style={{ height: 400 }}>
         <ResponsiveLine
-        colors={['#111111', '#ff0000']}
           data={chartData}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          xScale={{ type: "time", format: "%d/%m/%Y %H:%M" }} //05/15/2020 0:00
-          xFormat="time:%d-%m-%Y %H:%M"
+          xScale={{
+            type: "time",
+            format: "%Y-%m-%d",
+          }}
+          xFormat="time:%Y-%m-%d"
           yScale={{
             type: "linear",
-            min: 0,
-            max: 50,
             stacked: false,
             reverse: false,
+            min: 0,
+            max: 2000,
           }}
           axisTop={null}
           axisRight={null}
@@ -68,7 +66,7 @@ export const TemperatureChart = (props) => {
             tickPadding: 5,
             tickRotation: 0,
             legend: "Time",
-            format: "%d-%m-%Y %H:%M",
+            format: "%Y-%m-%d",
             legendOffset: 36,
             legendPosition: "middle",
           }}
@@ -76,7 +74,7 @@ export const TemperatureChart = (props) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: "Temperature (C)",
+            legend: "Active Power",
             legendOffset: -40,
             legendPosition: "middle",
           }}
@@ -118,3 +116,6 @@ export const TemperatureChart = (props) => {
     </div>
   );
 };
+
+      
+export default ConsumptionChart;

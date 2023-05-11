@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { jitter } from "../utils/jitter";
 import { Buttons } from "./Buttons";
 
-const CHART_SIZE = 10;
+const CHART_SIZE = 12;
 
 export const DailyYieldChart = (props) => {
   const { powerData } = props;
@@ -23,7 +23,7 @@ export const DailyYieldChart = (props) => {
     return [
       {
         id: "Daily Yield",
-        color: "hsl(200, 70%, 50%)",
+        color: "hsl(20, 56%, 38%)",
         data: chartData,
       },
     ];
