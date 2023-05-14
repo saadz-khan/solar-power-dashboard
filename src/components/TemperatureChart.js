@@ -49,7 +49,7 @@ export const TemperatureChart = (props) => {
     <div>
       <div style={{ height: 400 }}>
         <ResponsiveLine
-        colors={['#111111', '#ff0000']}
+        colors={['#D92629', '#F2E41C']}
           data={chartData}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
           xScale={{ type: "time", format: "%d/%m/%Y %H:%M" }} //05/15/2020 0:00

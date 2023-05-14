@@ -23,7 +23,6 @@ export const DailyYieldChart = (props) => {
     return [
       {
         id: "Daily Yield",
-        color: "hsl(20, 56%, 38%)",
         data: chartData,
       },
     ];
@@ -49,6 +48,7 @@ export const DailyYieldChart = (props) => {
       <div style={{ height: 400 }}>
         <ResponsiveLine
           data={powerChartData}
+          colors={'#FFCD05'}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
           xScale={{ type: "time", format: "%m/%d/%Y %H:%M:%s" }}
           xFormat="time:%m-%d-%Y %H:%M:%s"

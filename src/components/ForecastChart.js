@@ -13,7 +13,7 @@ export const ForecastChart = (props) => {
     return [
       {
         id: "Actual",
-        color: "hsl(252, 53%, 50%)",
+        color: "hsl(92, 97%, 43%)",
         data: slicedForecastData
           .filter((item) => item.DATE_TIME !== "0")
           .map((item) => ({
@@ -23,7 +23,7 @@ export const ForecastChart = (props) => {
       },
       {
         id: "Forecasted",
-        color: "hsl(87, 56%, 38%",
+        color: "hsl(87, 56%, 38%)",
         data: slicedForecastData
           .filter((item) => item.DATE_TIME !== "0")
           .map((item) => ({
@@ -58,6 +58,7 @@ export const ForecastChart = (props) => {
       <div style={{ height: 400 }}>
         <ResponsiveLine
           data={chartData}
+          colors={["#FD7C68", "#7AD926"]}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
           xScale={{ type: "time", format: "%Y-%m-%d %H:%M:%S" }}
           xFormat="time:%Y-%m-%d %H:%M:%S"

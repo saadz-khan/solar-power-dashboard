@@ -13,7 +13,6 @@ export const ConsumptionChart = (props) => {
     return [
       {
         id: "Active Power",
-        color: "hsl(252, 53%, 50%)",
         data: slicedConsumptionData.map((item) => ({
           x: item.DATE_TIME, // Convert DATE_TIME to Date type
           y: item.Global_active_power
@@ -57,7 +56,7 @@ export const ConsumptionChart = (props) => {
             stacked: false,
             reverse: false,
             min: 0,
-            max: 2000,
+            max: 2700,
           }}
           axisTop={null}
           axisRight={null}
